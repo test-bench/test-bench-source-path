@@ -10,5 +10,9 @@ end
 
 require 'test_bench/source_path/controls'
 
-#SourcePath = TestBench::SourcePath
-#Controls = TestBench::SourcePath::Controls
+require 'tmpdir'
+require 'fileutils'
+require 'securerandom'
+
+SourcePath = TestBench::SourcePath
+Controls = TestBench::SourcePath::Controls
