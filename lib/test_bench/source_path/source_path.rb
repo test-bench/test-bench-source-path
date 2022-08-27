@@ -1,7 +1,23 @@
 module TestBench
   class SourcePath
+    attr_reader :path
+    attr_reader :base_dir
+
+    def initialize(path, base_dir)
+      @path = path
+      @base_dir = base_dir
+    end
+
+    def self.build(path_fragment, *path_fragments, base_dir: nil)
+      base_dir ||= Defaults.base_dir
+
+      path = canonize(path_fragment, *path_fragments, base_dir:)
+
+      new(path, base_dir)
+    end
+
     def self.canonize(path_fragment, *path_fragments, base_dir: nil)
-      base_dir ||= Dir.pwd
+      base_dir ||= Defaults.base_dir
 
       path = File.join(path_fragment, path_fragments)
 
@@ -31,9 +47,23 @@ module TestBench
       path
     end
 
+    def absolute_path
+      if File.absolute_path?(path)
+        path
+      else
+        File.join(base_dir, path)
+      end
+    end
+
     def self.separator_length
       separator = File::ALT_SEPARATOR || File::SEPARATOR
       separator.length
+    end
+
+    module Defaults
+      def self.base_dir
+        Dir.pwd
+      end
     end
   end
 end
