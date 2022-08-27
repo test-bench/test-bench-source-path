@@ -3,6 +3,11 @@ module TestBench
     attr_reader :path
     attr_reader :base_dir
 
+    def gem_pattern
+      @gem_pattern ||= Pattern::Gem.instance
+    end
+    attr_writer :gem_pattern
+
     def initialize(path, base_dir)
       @path = path
       @base_dir = base_dir
@@ -53,6 +58,10 @@ module TestBench
       else
         File.join(base_dir, path)
       end
+    end
+
+    def gem?
+      gem_pattern.match?(self)
     end
 
     def self.separator_length

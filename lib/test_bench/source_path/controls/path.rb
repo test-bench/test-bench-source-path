@@ -18,6 +18,16 @@ module TestBench
 
             File.join(*path_fragments)
           end
+
+          module Gem
+            def self.example
+              rubygems_ruby_version = TestBench::SourcePath::Pattern::Gem.rubygems_ruby_version
+
+              filename = Path.filename
+
+              Relative.example('gems', 'ruby', rubygems_ruby_version, 'gems', 'some_gem-1.0.0', 'lib', 'some_gem', filename)
+            end
+          end
         end
 
         module Absolute
@@ -29,6 +39,14 @@ module TestBench
             root = Directory.root
 
             File.join(root, *path_fragments)
+          end
+
+          module Gem
+            def self.example
+              relative_path = Relative::Gem.example
+
+              Absolute.example(relative_path)
+            end
           end
         end
       end
