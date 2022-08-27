@@ -66,4 +66,17 @@ module TestBench
       end
     end
   end
+
+  def self.SourcePath(path, *path_fragments)
+    case path
+    when SourcePath
+      path
+    when String
+      SourcePath.build(path, *path_fragments)
+    when nil
+      SourcePath.build('.')
+    else
+      raise TypeError, "Cannot coerce #{path.inspect} into a Path"
+    end
+  end
 end
