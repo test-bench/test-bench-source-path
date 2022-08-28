@@ -26,15 +26,18 @@ module TestBench
 
       path = File.join(path_fragment, path_fragments)
 
-      if not File.absolute_path?(path)
-        path = File.join(base_dir, path)
+      if File.absolute_path?(path)
+        absolute_path = path
+      else
+        absolute_path = File.join(base_dir, path)
       end
-      absolute_path = File.absolute_path(path)
 
-      if absolute_path == base_dir
+      canonical_absolute_path = File.absolute_path(absolute_path)
+
+      if canonical_absolute_path == base_dir
         path = ''
 
-      elsif absolute_path.start_with?(base_dir)
+      elsif canonical_absolute_path.start_with?(base_dir)
         root_base_dir = File.dirname(base_dir) == base_dir
 
         if not root_base_dir
@@ -43,10 +46,10 @@ module TestBench
           relative_path_index = base_dir.length
         end
 
-        path = absolute_path[relative_path_index..-1]
+        path = canonical_absolute_path[relative_path_index..-1]
 
       else
-        path = absolute_path
+        path = canonical_absolute_path
       end
 
       path
